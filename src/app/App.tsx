@@ -5,6 +5,7 @@ import ImageCard from "@/components/ImageCard";
 import TestButton from "@/components/TestButton";
 import NextButton from "@/components/NextButton";
 import Button from "@/components/Button";
+import Input from "@/components/Input";
 
 function App() {
   return (
@@ -33,6 +34,19 @@ function App() {
       <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
         <Button buttonType="save">Сохранить</Button>
         <Button buttonType="delete">Удалить</Button>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+        <Input
+          id="test-input1"
+          type="text"
+          placeholder="Введите название поля..."
+        />
+        <Input
+          id="test-input2"
+          type="text"
+          placeholder="Введите название поля..."
+        />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import arrowIcon from "@/assets/icons/arrow.svg";
+import arrowIcon from "@/assets/icons/arrow-icon.svg";
 import styles from "./NextButton.module.css";
 
 const NextButton = () => {

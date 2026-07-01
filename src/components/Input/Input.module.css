@@ -1,0 +1,45 @@
+.inputContainer {
+  position: relative;
+}
+
+.input {
+  border: none;
+  border-radius: 15px;
+  outline: 1px solid var(--primary-color-gray);
+  font-size: 16px;
+  padding: 12px 35px 12px 10px;
+  color: var(--primary-color-black);
+  font-weight: 500;
+  box-shadow: var(--box-shadow-heavy);
+  transition-duration: 0.2s;
+
+  /* temp */
+  width: 280px;
+
+  &:focus {
+    transform: translateY(1px);
+    box-shadow: none;
+  }
+
+  &:focus + .clearButton {
+    transform: translateY(calc(-50% + 1px));
+  }
+}
+
+.clearButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 5px;
+  border: none;
+  background-color: transparent;
+  padding: none;
+  padding: 0px;
+  border-radius: 50%;
+  transition-duration: 0.2s;
+
+  & img {
+    width: 35px;
+    height: 35px;
+  }
+}
