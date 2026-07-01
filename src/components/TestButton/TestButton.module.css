@@ -1,0 +1,32 @@
+.container {
+  cursor: pointer;
+  outline: 3px solid var(--primary-color-white);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  transition-duration: 0.2s;
+  user-select: none;
+
+  width: 170px;
+  height: 90px;
+
+  &:hover {
+    transform: scale(1.03);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
+}
+
+.container.correct {
+  outline-color: var(--primary-color-green);
+  color: var(--primary-color-green);
+}
+
+.container.error {
+  outline-color: var(--primary-color-red);
+  color: var(--primary-color-red);
+}
