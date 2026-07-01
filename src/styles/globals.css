@@ -1,0 +1,15 @@
+body {
+  background-color: var(--primary-color-base);
+  color: var(--primary-color-white);
+  font-size: 14px;
+}
+
+.app-container {
+  padding: 10px;
+
+  /* temp */
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
