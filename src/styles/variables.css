@@ -11,6 +11,10 @@
   --primary-color-base: #24273a;
   --primary-color-black: #181926;
 
+  --accent-color-purple: #b887f5;
+  --accent-color-green: #9ce982;
+  --accent-color-red: #ee687c;
+
   --box-shadow-light: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   --box-shadow-medium: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   --box-shadow-heavy: rgba(0, 0, 0, 0.35) 0px 5px 15px;

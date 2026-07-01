@@ -3,6 +3,8 @@ import testPreview2 from "@/assets/images/48.jpg";
 import testPreview3 from "@/assets/images/50.jpg";
 import ImageCard from "@/components/ImageCard";
 import TestButton from "@/components/TestButton";
+import NextButton from "@/components/NextButton";
+import Button from "@/components/Button";
 
 function App() {
   return (
@@ -24,8 +26,13 @@ function App() {
       />
       <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
         <TestButton answer="Тестовый ответ" />
-        <TestButton answer="Тестовый ответ" answerStatus="correct" />
-        <TestButton answer="Тестовый ответ" answerStatus="error" />
+        <TestButton answer="Правильный ответ" answerStatus="correct" />
+        <TestButton answer="Неправильный ответ" answerStatus="error" />
+      </div>
+      <NextButton />
+      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+        <Button buttonType="save">Сохранить</Button>
+        <Button buttonType="delete">Удалить</Button>
       </div>
     </div>
   );
