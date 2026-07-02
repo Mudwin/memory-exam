@@ -8,6 +8,7 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import NavButton from "@/components/NavButton";
 import gridIcon from "@/assets/icons/grid-icon.svg";
+import FileInput from "@/components/FileInput";
 
 function App() {
   return (
@@ -66,6 +67,8 @@ function App() {
           Просмотр
         </NavButton>
       </div>
+      <FileInput />
+      <FileInput />
     </div>
   );
 }
