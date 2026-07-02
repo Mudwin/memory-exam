@@ -6,6 +6,8 @@ import TestButton from "@/components/TestButton";
 import NextButton from "@/components/NextButton";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
+import NavButton from "@/components/NavButton";
+import gridIcon from "@/assets/icons/grid-icon.svg";
 
 function App() {
   return (
@@ -47,6 +49,22 @@ function App() {
           type="text"
           placeholder="Введите название поля..."
         />
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
+          alignItems: "flex-start",
+        }}
+      >
+        <NavButton iconSrc={gridIcon} page="View cards" state="open">
+          Просмотр
+        </NavButton>
+        <NavButton iconSrc={gridIcon} page="View cards" state="closed">
+          Просмотр
+        </NavButton>
       </div>
     </div>
   );

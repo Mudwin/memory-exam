@@ -1,0 +1,32 @@
+.button {
+  background-color: var(--primary-color-purple);
+  border: none;
+  border-radius: 0px 15px 15px 0px;
+  display: flex;
+  align-items: center;
+  height: 45px;
+  transition-duration: 0.2s;
+
+  &:hover {
+    background-color: var(--accent-color-purple);
+  }
+
+  & span {
+    color: var(--primary-color-black);
+    font-weight: 700;
+    font-size: 20px;
+  }
+
+  & img {
+    width: 35px;
+    height: 35px;
+  }
+
+  &:has(span) {
+    padding-inline: 25px;
+  }
+
+  &:has(img) {
+    padding-inline: 15px;
+  }
+}
