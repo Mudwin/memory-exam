@@ -86,6 +86,62 @@ export const handlers = [
     );
   }),
 
+  http.post("/api/auth/forgot-password", async ({ request }) => {
+    const { email } = (await request.json()) as { email: string };
+
+    if (!email) {
+      return HttpResponse.json(
+        { error: "Для восстановления пароля нужен email" },
+        { status: 400 },
+      );
+    }
+
+    const generatedCode = Math.floor(1000 + Math.random() * 9000).toString();
+    verificationCodes.set(email, generatedCode);
+
+    console.log(`Код для сброса пароля: ${generatedCode}`);
+
+    return HttpResponse.json(
+      { message: "Код успешно отправлен" },
+      { status: 200 },
+    );
+  }),
+
+  http.post("/api/auth/reset-password", async ({ request }) => {
+    const { email, code, newPassword } = (await request.json()) as {
+      email: string;
+      code: string;
+      newPassword: string;
+    };
+
+    const savedCode = verificationCodes.get(email);
+
+    if (!savedCode || savedCode !== code) {
+      return HttpResponse.json({ error: "Неверный код" }, { status: 4000 });
+    }
+
+    const user = users.get(email);
+
+    if (!user) {
+      return HttpResponse.json(
+        { error: "Пользователь не найден" },
+        { status: 404 },
+      );
+    }
+
+    if (!newPassword || newPassword.length < 6) {
+      return HttpResponse.json(
+        { error: "Пароль не менее 6 символов" },
+        { status: 400 },
+      );
+    }
+
+    user.password = newPassword;
+    verificationCodes.delete(email);
+
+    return HttpResponse.json({ message: "Пароль обновлен" }, { status: 200 });
+  }),
+
   http.post("/api/auth/login", async ({ request }) => {
     const { email, password } = (await request.json()) as {
       email: string;
