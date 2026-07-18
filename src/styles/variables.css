@@ -1,11 +1,16 @@
 :root {
   --primary-color-pink: #f5bde6;
+  --primary-flamingo-color: #f2cdcd;
   --primary-color-purple: #c6a0f6;
   --primary-color-red: #ed8796;
+  --primary-color-maroon: #eba0ac;
   --primary-color-orange: #f5a97f;
   --primary-color-yellow: #eed49f;
   --primary-color-green: #a6da95;
+  --primary-color-teal: #94e2d5;
   --primary-color-blue: #8aadf4;
+  --primary-color-sky: #89dceb;
+  --primary-color-sapphire: #74c7ec;
   --primary-color-white: #cad3f5;
   --primary-color-gray: #6e738d;
   --primary-color-base: #24273a;

@@ -13,7 +13,7 @@
   box-shadow: var(--box-shadow-heavy);
   transition-duration: 0.2s;
 
-  /* temp */
+  /* temporary */
   width: 280px;
 
   &:focus {

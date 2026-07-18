@@ -1,0 +1,14 @@
+.subtext {
+  color: var(--primary-color-gray);
+  font-size: 14px;
+  margin: 0;
+}
+
+.link {
+  color: var(--primary-color-blue);
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}

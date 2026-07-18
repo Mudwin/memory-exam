@@ -5,11 +5,20 @@ type ButtonType = "save" | "delete";
 interface ButtonProps {
   children: React.ReactNode;
   buttonType: ButtonType;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 }
 
-const Button = ({ children, buttonType }: ButtonProps) => {
+const Button = ({
+  children,
+  buttonType,
+  type = "button",
+  disabled,
+}: ButtonProps) => {
   return (
     <button
+      type={type}
+      disabled={disabled}
       className={styles.button}
       style={
         (buttonType === "save"
