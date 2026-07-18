@@ -29,3 +29,7 @@
 ![](./src/assets/screenshots/1.png)
 
 ### • Моковая регистрация
+
+![](./src/assets/screenshots/2.png)
+
+![](./src/assets/screenshots/3.png)
