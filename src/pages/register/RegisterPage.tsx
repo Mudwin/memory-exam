@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router";
 import { useRegister } from "@/features/auth/register/model/useRegister";
 import EmailForm from "@/features/auth/ui/EmailForm/EmailForm";
 import CodeForm from "@/features/auth/ui/CodeForm/CodeForm";
@@ -7,12 +8,13 @@ import PasswordForm from "@/features/auth/ui/PasswordForm/PasswordForm";
 const RegisterPage = () => {
   const { step, isLoading, error, submitEmail, submitCode, submitPassword } =
     useRegister();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (step === "success") {
-      window.location.href = "/login";
+      navigate("/login", { replace: true });
     }
-  }, [step]);
+  }, [step, navigate]);
 
   return (
     <>

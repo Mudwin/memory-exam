@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import styles from "./FormLink.module.css";
 
 interface FormLinkProps {
@@ -10,9 +11,9 @@ const FormLink = ({ text, linkText, to }: FormLinkProps) => {
   return (
     <p className={styles.subtext}>
       {text}{" "}
-      <a href={to} className={styles.link}>
+      <Link to={to} className={styles.link}>
         {linkText}
-      </a>
+      </Link>
     </p>
   );
 };

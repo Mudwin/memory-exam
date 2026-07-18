@@ -1,10 +1,14 @@
-import LoginPage from "@/pages/login";
+import { BrowserRouter } from "react-router";
+import { AuthProvider } from "@/entities/user/model/AuthContext";
+import AppRouter from "@/app/router/AppRouter";
 
 function App() {
   return (
-    <div className="app-container">
-      <LoginPage />
-    </div>
+    <AuthProvider>
+      <BrowserRouter>
+        <AppRouter />
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
