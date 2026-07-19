@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { passwordSchema } from "@/features/auth/model/schemas";
 import FormContainer from "@/shared/ui/FormContainer/FormContainer";
 import Input from "@/shared/ui/Input/Input";
 import Button from "@/shared/ui/Button/Button";
-import styles from "./PasswordForm.module.css";
+import FormError from "@/shared/ui/FormError/FormError";
 
 interface PasswordFormProps {
   onSubmit: (password: string) => void;
@@ -10,41 +13,48 @@ interface PasswordFormProps {
   error?: string | null;
 }
 
-const PasswordForm = ({ onSubmit, isLoading, error }: PasswordFormProps) => {
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [mismatchError, setMismatchError] = useState(false);
+type PasswordFormValues = z.infer<typeof passwordSchema>;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      setMismatchError(true);
-      return;
-    }
-    setMismatchError(false);
-    onSubmit(password);
+const PasswordForm = ({ onSubmit, isLoading, error }: PasswordFormProps) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<PasswordFormValues>({
+    resolver: zodResolver(passwordSchema),
+    mode: "onChange",
+  });
+
+  const onFormSubmit = (data: PasswordFormValues) => {
+    onSubmit(data.password);
   };
 
   return (
     <FormContainer>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onFormSubmit)}>
         <Input
           id="password"
           type="password"
           placeholder="Введите пароль"
-          value={password}
-          onChange={setPassword}
+          {...register("password")}
+          error={errors.password?.message}
         />
+
         <Input
           id="confirm-password"
           type="password"
           placeholder="Повторите пароль"
-          value={confirmPassword}
-          onChange={setConfirmPassword}
+          {...register("confirmPassword")}
+          error={errors.confirmPassword?.message}
         />
-        {mismatchError && <p className={styles.error}>Пароли не совпадают</p>}
-        {error && <p className={styles.error}>{error}</p>}
-        <Button buttonType="save" type="submit" disabled={isLoading}>
+
+        {error && <FormError message={error} />}
+
+        <Button
+          buttonType="save"
+          type="submit"
+          disabled={isLoading || !isValid}
+        >
           Сохранить
         </Button>
       </form>

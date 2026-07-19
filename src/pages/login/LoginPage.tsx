@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "@/entities/user/model/useAuth";
 import { useLogin } from "@/features/auth/login/model/useLogin";
@@ -41,11 +41,6 @@ const LoginPage = () => {
       submitCode,
       submitNewPassword,
     } = forgotHook;
-
-    if (step === "success") {
-      setMode("login");
-      return null;
-    }
 
     return (
       <>

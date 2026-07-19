@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { loginSchema } from "@/features/auth/model/schemas";
 import FormContainer from "@/shared/ui/FormContainer/FormContainer";
 import Input from "@/shared/ui/Input/Input";
 import Button from "@/shared/ui/Button/Button";
 import FormLink from "@/shared/ui/FormLink/FormLink";
+import FormError from "@/shared/ui/FormError/FormError";
 import styles from "./LoginForm.module.css";
 
 interface LoginFormProps {
@@ -12,46 +16,63 @@ interface LoginFormProps {
   onForgotPassword: () => void;
 }
 
+type LoginFormValues = z.infer<typeof loginSchema>;
+
 const LoginForm = ({
   onSubmit,
   isLoading,
   error,
   onForgotPassword,
 }: LoginFormProps) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    mode: "onChange",
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(email, password);
+  const onFormSubmit = (data: LoginFormValues) => {
+    onSubmit(data.email, data.password);
   };
 
   return (
     <FormContainer>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onFormSubmit)}>
         <Input
           id="login-email"
           type="email"
           placeholder="Введите вашу электронную почту"
-          value={email}
-          onChange={setEmail}
+          {...register("email")}
+          error={errors.email?.message}
         />
+
         <Input
           id="login-password"
           type="password"
           placeholder="Введите пароль"
-          value={password}
-          onChange={setPassword}
+          {...register("password")}
+          error={errors.password?.message}
         />
-        <Button buttonType="save" type="submit" disabled={isLoading}>
+
+        {error && <FormError message={error} />}
+
+        <Button
+          buttonType="save"
+          type="submit"
+          disabled={isLoading || !isValid}
+        >
           Войти
         </Button>
+
         <div className={styles.links}>
           <FormLink
             text="У меня нет аккаунта"
             linkText="Зарегистрироваться"
             to="/register"
           />
+
           <button
             type="button"
             className={styles.forgotLink}

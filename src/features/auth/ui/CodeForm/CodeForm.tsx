@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { codeSchema } from "@/features/auth/model/schemas";
 import Input from "@/shared/ui/Input/Input";
 import Button from "@/shared/ui/Button/Button";
 import FormContainer from "@/shared/ui/FormContainer/FormContainer";
+import FormError from "@/shared/ui/FormError/FormError";
 import styles from "./CodeForm.module.css";
 
 interface CodeFormProps {
@@ -11,10 +16,24 @@ interface CodeFormProps {
   onResend: () => void;
 }
 
+type CodeFormValues = z.infer<typeof codeSchema>;
+
 const CodeForm = ({ onSubmit, isLoading, error, onResend }: CodeFormProps) => {
-  const [code, setCode] = useState("");
   const [timer, setTimer] = useState(60);
   const [isResendable, setIsResendable] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<CodeFormValues>({
+    resolver: zodResolver(codeSchema),
+    mode: "onChange",
+  });
+
+  const onFormSubmit = (data: CodeFormValues) => {
+    onSubmit(data.code);
+  };
 
   useEffect(() => {
     if (timer <= 0) {
@@ -44,24 +63,27 @@ const CodeForm = ({ onSubmit, isLoading, error, onResend }: CodeFormProps) => {
     setIsResendable(false);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(code);
-  };
-
   return (
     <FormContainer>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onFormSubmit)}>
         <Input
           id="code"
           type="text"
-          placeholder="Введите код подтверждения, присланный на почту"
-          value={code}
-          onChange={setCode}
+          placeholder="Введите код подтверждения"
+          {...register("code")}
+          error={errors.code?.message}
         />
-        <Button buttonType="save" type="submit" disabled={isLoading}>
+
+        {error && <FormError message={error} />}
+
+        <Button
+          buttonType="save"
+          type="submit"
+          disabled={isLoading || !isValid}
+        >
           Подтвердить
         </Button>
+
         <div className={styles.resendContainer}>
           {!isResendable ? (
             <span className={styles.timer}>
