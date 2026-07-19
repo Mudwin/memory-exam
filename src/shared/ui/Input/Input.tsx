@@ -1,68 +1,42 @@
-import { useState, type ChangeEvent } from "react";
+import { forwardRef } from "react";
 import crossIcon from "@/assets/icons/cross-icon.svg";
 import styles from "./Input.module.css";
 
-interface InputProps {
-  id: string;
-  type: string;
-  placeholder: string;
-  value?: string;
-  onChange?: (value: string) => void;
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  error?: string;
 }
 
-const Input = ({
-  id,
-  type,
-  placeholder,
-  value: externalValue,
-  onChange: externalOnChange,
-}: InputProps) => {
-  const [internalValue, setInternalValue] = useState("");
+const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ error, className, ...props }, ref) => {
+    const handleClear = () => {
+      if (props.onChange) {
+        const event = {
+          target: { value: "" },
+        } as React.ChangeEvent<HTMLInputElement>;
 
-  const isControlled = externalValue !== undefined;
+        props.onChange(event);
+      }
+    };
 
-  const value = isControlled ? externalValue : internalValue;
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-
-    if (isControlled) {
-      externalOnChange?.(newValue);
-    } else {
-      setInternalValue(newValue);
-    }
-  };
-
-  const handleClear = () => {
-    if (isControlled) {
-      externalOnChange?.("");
-    } else {
-      setInternalValue("");
-    }
-  };
-
-  return (
-    <div className={styles.inputContainer}>
-      <input
-        id={id}
-        type={type}
-        value={value}
-        placeholder={placeholder}
-        onChange={handleChange}
-        className={styles.input}
-      />
-      {value && (
-        <button
-          className={styles.clearButton}
-          onClick={handleClear}
-          type="button"
-        >
-          <img src={crossIcon} alt="" />
-        </button>
-      )}
-    </div>
-  );
-};
+    return (
+      <div className={`${styles.inputWrapper} ${className || ""}`}>
+        <div className={styles.inputContainer}>
+          <input ref={ref} {...props} className={styles.input} />
+          {props.value && (
+            <button
+              type="button"
+              className={styles.clearButton}
+              onClick={handleClear}
+            >
+              <img src={crossIcon} alt="" />
+            </button>
+          )}
+        </div>
+        {error && <span className={styles.error}>{error}</span>}
+      </div>
+    );
+  },
+);
 
 export default Input;
 

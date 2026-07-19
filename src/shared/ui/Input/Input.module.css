@@ -43,3 +43,14 @@
     height: 35px;
   }
 }
+
+.inputWrapper {
+  width: 100%;
+}
+
+.error {
+  color: var(--primary-color-red);
+  font-size: 12px;
+  margin-top: 4px;
+  text-align: left;
+}
