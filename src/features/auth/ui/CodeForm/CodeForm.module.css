@@ -1,5 +1,21 @@
 .timer {
   color: var(--primary-color-gray);
   font-size: 14px;
-  margin: 0;
+}
+
+.resendContainer {
+  margin-top: 4px;
+}
+
+.resendLink {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--primary-color-blue);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.resendLink:hover {
+  text-decoration: underline;
 }

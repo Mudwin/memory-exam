@@ -17,4 +17,17 @@
     transform: translateY(2px);
     box-shadow: none;
   }
+
+  &:disabled {
+    background-color: var(--primary-color-gray);
+    color: var(--primary-color-white);
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+
+  &:disabled:hover {
+    background-color: var(--primary-color-gray);
+  }
 }

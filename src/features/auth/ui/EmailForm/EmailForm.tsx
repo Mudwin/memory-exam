@@ -35,7 +35,7 @@ const EmailForm = ({
           onChange={setEmail}
         />
         <Button buttonType="save" type="submit" disabled={isLoading}>
-          {isLoading ? "Загрузка..." : "Получить код"}
+          Получить код
         </Button>
         {showLoginLink && (
           <FormLink

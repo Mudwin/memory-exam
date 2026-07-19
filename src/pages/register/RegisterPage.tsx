@@ -27,7 +27,12 @@ const RegisterPage = () => {
         />
       )}
       {step === "code" && (
-        <CodeForm onSubmit={submitCode} isLoading={isLoading} error={error} />
+        <CodeForm
+          onSubmit={submitCode}
+          isLoading={isLoading}
+          error={error}
+          onResend={() => submitEmail(email)}
+        />
       )}
       {step === "password" && (
         <PasswordForm

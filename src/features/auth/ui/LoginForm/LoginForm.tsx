@@ -44,7 +44,7 @@ const LoginForm = ({
           onChange={setPassword}
         />
         <Button buttonType="save" type="submit" disabled={isLoading}>
-          {isLoading ? "Вход..." : "Войти"}
+          Войти
         </Button>
         <div className={styles.links}>
           <FormLink

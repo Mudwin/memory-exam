@@ -45,7 +45,7 @@ const PasswordForm = ({ onSubmit, isLoading, error }: PasswordFormProps) => {
         {mismatchError && <p className={styles.error}>Пароли не совпадают</p>}
         {error && <p className={styles.error}>{error}</p>}
         <Button buttonType="save" type="submit" disabled={isLoading}>
-          {isLoading ? "Сохранение..." : "Сохранить"}
+          Сохранить
         </Button>
       </form>
     </FormContainer>

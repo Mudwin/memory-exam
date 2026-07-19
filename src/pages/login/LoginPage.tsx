@@ -57,7 +57,12 @@ const LoginPage = () => {
           />
         )}
         {step === "code" && (
-          <CodeForm onSubmit={submitCode} isLoading={isLoading} error={error} />
+          <CodeForm
+            onSubmit={submitCode}
+            isLoading={isLoading}
+            error={error}
+            onResend={() => submitEmail(email)}
+          />
         )}
         {step === "newPassword" && (
           <PasswordForm
