@@ -36,6 +36,7 @@ const LoginPage = () => {
       step,
       isLoading,
       error,
+      email,
       submitEmail,
       submitCode,
       submitNewPassword,

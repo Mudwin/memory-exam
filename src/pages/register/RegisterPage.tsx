@@ -6,8 +6,15 @@ import CodeForm from "@/features/auth/ui/CodeForm/CodeForm";
 import PasswordForm from "@/features/auth/ui/PasswordForm/PasswordForm";
 
 const RegisterPage = () => {
-  const { step, isLoading, error, submitEmail, submitCode, submitPassword } =
-    useRegister();
+  const {
+    step,
+    email,
+    isLoading,
+    error,
+    submitEmail,
+    submitCode,
+    submitPassword,
+  } = useRegister();
   const navigate = useNavigate();
 
   useEffect(() => {
