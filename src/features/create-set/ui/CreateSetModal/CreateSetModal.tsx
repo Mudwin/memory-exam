@@ -9,7 +9,7 @@ import styles from "./CreateSetModal.module.css";
 const createSetSchema = z.object({
   title: z.string().min(1, "Название обязательно"),
   description: z.string().optional(),
-  visibility: z.enum(["private", "public"]).default("private"),
+  visibility: z.enum(["private", "public"]),
 });
 
 type CreateSetFormValues = z.infer<typeof createSetSchema>;
