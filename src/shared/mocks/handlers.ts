@@ -2,6 +2,9 @@ import { http, HttpResponse } from "msw";
 
 const STORAGE_KEY_USERS = "msw_users";
 const STORAGE_KEY_REFRESH = "mock_refresh_token";
+const STORAGE_KEY_SETS = "msw_sets";
+const STORAGE_KEY_OBJECTS = "msw_objects";
+const STORAGE_KEY_SETTINGS = "msw_set_settings";
 
 const loadUsers = (): Map<string, { email: string; password?: string }> => {
   try {
@@ -33,6 +36,83 @@ const verifiedEmails = new Set<string>();
 
 const generateCode = (): string => {
   return Math.floor(1000 + Math.random() * 9000).toString();
+};
+
+const loadSets = (): Map<string, any> => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_SETS);
+
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      return new Map(Object.entries(parsed));
+    }
+  } catch (err) {}
+
+  return new Map();
+};
+
+const saveSets = (sets: Map<string, any>) => {
+  const obj = Object.fromEntries(sets);
+  localStorage.setItem(STORAGE_KEY_SETS, JSON.stringify(obj));
+};
+
+const loadObjects = (): Map<string, any> => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_OBJECTS);
+
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      return new Map(Object.entries(parsed));
+    }
+  } catch (err) {}
+
+  return new Map();
+};
+
+const saveObjects = (objects: Map<string, any>) => {
+  const obj = Object.fromEntries(objects);
+  localStorage.setItem(STORAGE_KEY_OBJECTS, JSON.stringify(obj));
+};
+
+const loadSettings = (): Map<string, any> => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_SETTINGS);
+
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      return new Map(Object.entries(parsed));
+    }
+  } catch (err) {}
+
+  return new Map();
+};
+
+const saveSettings = (settings: Map<string, any>) => {
+  const obj = Object.fromEntries(settings);
+  localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify(obj));
+};
+
+let sets = loadSets();
+let objects = loadObjects();
+let publicSettings = loadSettings();
+
+const generateId = (): string => {
+  return Math.random().toString(36).substring(2, 15);
+};
+
+const getCurrentUserFromRequest = (request: Request): string | null => {
+  const authHeader = request.headers.get("Authorization");
+
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    const token = authHeader.substring(7);
+
+    const match = token.match(/fake-access-token-for-(.+?)-/);
+    if (match) {
+      return match[1];
+    }
+  }
+
+  return null;
 };
 
 export const handlers = [
@@ -226,6 +306,395 @@ export const handlers = [
     return HttpResponse.json(
       { accessToken: newAccessToken, user: { email: email, id: "user-id" } },
       { status: 200 },
+    );
+  }),
+
+  http.get("/api/sets", async ({ request }) => {
+    const email = getCurrentUserFromRequest(request);
+
+    if (!email) {
+      return HttpResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const userSets = Array.from(sets.values()).filter(
+      (s) => s.ownerId === email,
+    );
+
+    return HttpResponse.json(userSets, { status: 200 });
+  }),
+
+  http.post("/api/sets", async ({ request }) => {
+    const email = getCurrentUserFromRequest(request);
+
+    if (!email) {
+      return HttpResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = (await request.json()) as {
+      title: string;
+      description?: string;
+      visibility: string;
+    };
+
+    if (!body.title) {
+      return HttpResponse.json(
+        { error: "Название обязательно" },
+        { status: 400 },
+      );
+    }
+
+    const newSet = {
+      id: generateId(),
+      title: body.title,
+      description: body.description || "",
+      visibility: body.visibility || "private",
+      ownerId: email,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      objectCount: 0,
+    };
+
+    sets.set(newSet.id, newSet);
+    saveSets(sets);
+
+    publicSettings.set(newSet.id, {
+      allowCards: true,
+      allowTests: true,
+      allowExam: true,
+      allowAnswers: false,
+      requireAuth: false,
+    });
+
+    saveSettings(publicSettings);
+
+    return HttpResponse.json(newSet, { status: 201 });
+  }),
+
+  http.get("/api/sets/:id", async ({ params, request }) => {
+    const { id } = params;
+    const email = getCurrentUserFromRequest(request);
+
+    if (!email) {
+      return HttpResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const set = sets.get(id as string);
+    if (!set) {
+      return HttpResponse.json({ error: "Набор не найден" }, { status: 404 });
+    }
+
+    if (set.ownerId !== email) {
+      return HttpResponse.json({ error: "Нет доступа" }, { status: 403 });
+    }
+
+    const setObjects = Array.from(objects.values()).filter(
+      (o) => o.setId === id,
+    );
+
+    const result = {
+      ...set,
+      objects: setObjects,
+      objectCount: setObjects.length,
+    };
+
+    return HttpResponse.json(result, { status: 200 });
+  }),
+
+  http.put("/api/sets/:id", async ({ params, request }) => {
+    const { id } = params;
+    const email = getCurrentUserFromRequest(request);
+
+    if (!email) {
+      return HttpResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const set = sets.get(id as string);
+    if (!set) {
+      return HttpResponse.json({ error: "Набор не найден" }, { status: 404 });
+    }
+
+    if (set.ownerId !== email) {
+      return HttpResponse.json({ error: "Нет доступа" }, { status: 403 });
+    }
+
+    const body = (await request.json()) as {
+      title?: string;
+      description?: string;
+      visibility?: string;
+    };
+
+    if (body.title !== undefined) set.title = body.title;
+    if (body.description !== undefined) set.description = body.description;
+    if (body.visibility !== undefined) set.visibility = body.visibility;
+
+    set.updatedAt = new Date().toISOString();
+
+    sets.set(set.id, set);
+    saveSets(sets);
+
+    return HttpResponse.json(set, { status: 200 });
+  }),
+
+  http.delete("/api/sets/:id", async ({ params, request }) => {
+    const { id } = params;
+    const email = getCurrentUserFromRequest(request);
+
+    if (!email) {
+      return HttpResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const set = sets.get(id as string);
+    if (!set) {
+      return HttpResponse.json({ error: "Набор не найден" }, { status: 404 });
+    }
+
+    if (set.ownerId !== email) {
+      return HttpResponse.json({ error: "Нет доступа" }, { status: 403 });
+    }
+
+    const toDelete = Array.from(objects.keys()).filter((key) => {
+      const obj = objects.get(key);
+      return obj && obj.setId === id;
+    });
+
+    toDelete.forEach((key) => objects.delete(key));
+
+    sets.delete(id as string);
+    saveSets(sets);
+    saveObjects(objects);
+    publicSettings.delete(id as string);
+    saveSettings(publicSettings);
+
+    return HttpResponse.json({ message: "Набор удалён" }, { status: 200 });
+  }),
+
+  http.get("/api/sets/:id/public", async ({ params }) => {
+    const { id } = params;
+    const set = sets.get(id as string);
+
+    if (!set) {
+      return HttpResponse.json({ error: "Набор не найден" }, { status: 404 });
+    }
+
+    if (set.visibility !== "public") {
+      return HttpResponse.json(
+        { error: "Набор не публичный" },
+        { status: 403 },
+      );
+    }
+
+    const setObjects = Array.from(objects.values()).filter(
+      (o) => o.setId === id,
+    );
+
+    const result = {
+      ...set,
+      objects: setObjects,
+      objectCount: setObjects.length,
+    };
+
+    return HttpResponse.json(result, { status: 200 });
+  }),
+
+  http.get("/api/sets/:id/public-settings", async ({ params, request }) => {
+    const { id } = params;
+    const email = getCurrentUserFromRequest(request);
+
+    if (!email) {
+      return HttpResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const set = sets.get(id as string);
+    if (!set || set.ownerId !== email) {
+      return HttpResponse.json({ error: "Нет доступа" }, { status: 403 });
+    }
+
+    const settings = publicSettings.get(id as string) || {
+      allowCards: true,
+      allowTests: true,
+      allowExam: true,
+      allowAnswers: false,
+      requireAuth: false,
+    };
+
+    return HttpResponse.json(settings, { status: 200 });
+  }),
+
+  http.put("/api/sets/:id/public-settings", async ({ params, request }) => {
+    const { id } = params;
+    const email = getCurrentUserFromRequest(request);
+
+    if (!email) {
+      return HttpResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const set = sets.get(id as string);
+    if (!set || set.ownerId !== email) {
+      return HttpResponse.json({ error: "Нет доступа" }, { status: 403 });
+    }
+
+    const body = (await request.json()) as {
+      allowCards: boolean;
+      allowTests: boolean;
+      allowExam: boolean;
+      allowAnswers: boolean;
+      requireAuth: boolean;
+    };
+
+    publicSettings.set(id as string, body);
+    saveSettings(publicSettings);
+
+    return HttpResponse.json(body, { status: 200 });
+  }),
+
+  http.get("/api/sets/:id/objects", async ({ params, request }) => {
+    const { id } = params;
+    const email = getCurrentUserFromRequest(request);
+
+    const set = sets.get(id as string);
+    if (!set) {
+      return HttpResponse.json({ error: "Набор не найден" }, { status: 404 });
+    }
+
+    if (set.visibility === "private") {
+      if (!email || set.ownerId !== email) {
+        return HttpResponse.json({ error: "Нет доступа" }, { status: 403 });
+      }
+    }
+
+    const setObjects = Array.from(objects.values()).filter(
+      (o) => o.setId === id,
+    );
+
+    return HttpResponse.json(setObjects, { status: 200 });
+  }),
+
+  http.post("/api/sets/:id/objects", async ({ params, request }) => {
+    const { id } = params;
+    const email = getCurrentUserFromRequest(request);
+
+    if (!email) {
+      return HttpResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const set = sets.get(id as string);
+    if (!set || set.ownerId !== email) {
+      return HttpResponse.json({ error: "Нет доступа" }, { status: 403 });
+    }
+
+    const formData = await request.formData();
+    const fieldsRaw = formData.get("fields") as string;
+    const imageFile = formData.get("image") as File | null;
+
+    let fields = [];
+
+    try {
+      fields = JSON.parse(fieldsRaw);
+    } catch (err) {
+      return HttpResponse.json(
+        { error: "Неверный формат полей" },
+        { status: 400 },
+      );
+    }
+
+    const newObject = {
+      id: generateId(),
+      setId: id as string,
+      fields: fields,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    objects.set(newObject.id, newObject);
+    saveObjects(objects);
+
+    const setObjects = Array.from(objects.values()).filter(
+      (o) => o.setId === id,
+    );
+
+    set.objectCount = setObjects.length;
+    sets.set(set.id, set);
+    saveSets(sets);
+
+    return HttpResponse.json(newObject, { status: 201 });
+  }),
+
+  http.put("/api/objects/:id", async ({ params, request }) => {
+    const { id } = params;
+    const email = getCurrentUserFromRequest(request);
+
+    if (!email) {
+      return HttpResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const object = objects.get(id as string);
+    if (!object) {
+      return HttpResponse.json({ error: "Объект не найден" }, { status: 404 });
+    }
+
+    const set = sets.get(object.setId);
+    if (!set || set.ownerId !== email) {
+      return HttpResponse.json({ error: "Нет доступа" }, { status: 403 });
+    }
+
+    const formData = await request.formData();
+    const fieldsRaw = formData.get("fields") as string | null;
+
+    if (fieldsRaw) {
+      try {
+        const fields = JSON.parse(fieldsRaw);
+        object.fields = fields;
+      } catch (err) {
+        return HttpResponse.json(
+          { error: "Неверный формат полей" },
+          { status: 400 },
+        );
+      }
+    }
+
+    object.updatedAt = new Date().toISOString();
+    objects.set(object.id, object);
+    saveObjects(objects);
+
+    return HttpResponse.json(object, { status: 200 });
+  }),
+
+  http.delete("/api/objects/:id", async ({ params, request }) => {
+    const { id } = params;
+    const email = getCurrentUserFromRequest(request);
+
+    if (!email) {
+      return HttpResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const object = objects.get(id as string);
+    if (!object) {
+      return HttpResponse.json({ error: "Объект не найден" }, { status: 404 });
+    }
+
+    const set = sets.get(object.setId);
+    if (!set || set.ownerId !== email) {
+      return HttpResponse.json({ error: "Нет доступа" }, { status: 403 });
+    }
+
+    objects.delete(id as string);
+    saveObjects(objects);
+
+    const setObjects = Array.from(objects.values()).filter(
+      (o) => o.setId === object.setId,
+    );
+
+    set.objectCount = setObjects.length;
+    sets.set(set.id, set);
+    saveSets(sets);
+
+    return HttpResponse.json({ message: "Объект удалён" }, { status: 200 });
+  }),
+
+  http.get("/api/objects/:id/image", async () => {
+    return HttpResponse.json(
+      { error: "заглушка, не реализуется через MSW" },
+      { status: 501 },
     );
   }),
 ];

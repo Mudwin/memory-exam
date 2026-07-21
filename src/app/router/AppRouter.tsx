@@ -5,7 +5,7 @@ import PrivateRoute from "./PrivateRoute";
 import LoginPage from "@/pages/login/LoginPage";
 import RegisterPage from "@/pages/register/RegisterPage";
 import CollectionsPage from "@/pages/collections/CollectionsPage";
-import AppLayout from "@/app/layouts/AppLayout/AppLayout";
+import AppLayout from "@/app/layouts/AppLayout";
 
 const AppRouter = () => {
   return (
