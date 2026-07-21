@@ -5,6 +5,7 @@ import PrivateRoute from "./PrivateRoute";
 import LoginPage from "@/pages/login/LoginPage";
 import RegisterPage from "@/pages/register/RegisterPage";
 import CollectionsPage from "@/pages/collections/CollectionsPage";
+import AppLayout from "@/app/layouts/AppLayout/AppLayout";
 
 const AppRouter = () => {
   return (
@@ -17,7 +18,14 @@ const AppRouter = () => {
       </Route>
 
       <Route element={<PrivateRoute />}>
-        <Route path="/collections" element={<CollectionsPage />} />
+        <Route
+          path="/collections"
+          element={
+            <AppLayout>
+              <CollectionsPage />
+            </AppLayout>
+          }
+        />
       </Route>
 
       <Route path="*" element={<RootPage />} />
