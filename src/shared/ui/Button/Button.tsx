@@ -2,11 +2,9 @@ import styles from "./Button.module.css";
 
 type ButtonType = "save" | "delete";
 
-interface ButtonProps {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   buttonType: ButtonType;
-  type?: "button" | "submit" | "reset";
-  disabled?: boolean;
 }
 
 const Button = ({
@@ -14,6 +12,7 @@ const Button = ({
   buttonType,
   type = "button",
   disabled,
+  ...props
 }: ButtonProps) => {
   return (
     <button
@@ -31,6 +30,7 @@ const Button = ({
               "--accent-color": "var(--accent-color-red)",
             }) as React.CSSProperties
       }
+      {...props}
     >
       {children}
     </button>

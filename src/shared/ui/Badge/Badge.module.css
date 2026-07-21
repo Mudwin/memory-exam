@@ -1,0 +1,18 @@
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: lowercase;
+}
+
+.public {
+  background-color: var(--primary-color-green);
+  color: var(--primary-color-black);
+}
+
+.private {
+  background-color: var(--primary-color-gray);
+  color: var(--primary-color-white);
+}

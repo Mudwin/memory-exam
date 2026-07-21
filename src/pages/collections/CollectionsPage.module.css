@@ -1,0 +1,113 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary-color-white);
+  margin: 0;
+}
+
+.count {
+  font-size: 16px;
+  color: var(--primary-color-gray);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search {
+  flex: 1;
+  min-width: 200px;
+  max-width: 400px;
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+}
+
+.filterButton {
+  background: transparent;
+  border: 1px solid var(--primary-color-gray);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 14px;
+  color: var(--primary-color-white);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filterButton:hover {
+  background-color: var(--primary-color-gray);
+  color: var(--primary-color-base);
+}
+
+.filterButton.active {
+  background-color: var(--accent-color-purple);
+  border-color: var(--accent-color-purple);
+  color: var(--primary-color-black);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: var(--primary-color-base);
+  border-radius: 16px;
+  border: 1px dashed var(--primary-color-gray);
+}
+
+.emptyTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--primary-color-white);
+  margin-bottom: 8px;
+}
+
+.emptyDescription {
+  font-size: 16px;
+  color: var(--primary-color-gray);
+  margin-bottom: 20px;
+}
+
+.centerMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  gap: 16px;
+}
+
+.errorText {
+  color: var(--primary-color-red);
+  font-size: 18px;
+}
