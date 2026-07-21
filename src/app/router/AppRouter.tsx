@@ -6,6 +6,7 @@ import LoginPage from "@/pages/login/LoginPage";
 import RegisterPage from "@/pages/register/RegisterPage";
 import CollectionsPage from "@/pages/collections/CollectionsPage";
 import AppLayout from "@/app/layouts/AppLayout";
+import SetPage from "@/pages/set";
 
 const AppRouter = () => {
   return (
@@ -23,6 +24,14 @@ const AppRouter = () => {
           element={
             <AppLayout>
               <CollectionsPage />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/collections/:setId"
+          element={
+            <AppLayout>
+              <SetPage />
             </AppLayout>
           }
         />

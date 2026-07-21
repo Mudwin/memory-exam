@@ -1,0 +1,33 @@
+.emptyState {
+  background-color: var(--primary-color-base);
+  border: 1px dashed var(--primary-color-gray);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  min-height: 300px;
+}
+
+.content {
+  text-align: center;
+  max-width: 400px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--primary-color-white);
+  margin-bottom: 8px;
+}
+
+.description {
+  font-size: 16px;
+  color: var(--primary-color-gray);
+  margin-bottom: 20px;
+}
+
+.action {
+  display: flex;
+  justify-content: center;
+}
