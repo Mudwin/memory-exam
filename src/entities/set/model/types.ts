@@ -4,6 +4,7 @@ export type Visibility = "private" | "public";
 
 export interface SetType {
   id: string;
+  shareId?: string;
   title: string;
   description?: string;
   visibility: Visibility;

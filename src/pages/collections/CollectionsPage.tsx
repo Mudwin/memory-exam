@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router";
 import { useSets } from "@/entities/set/model/useSets";
 import SetCard from "@/entities/set/ui/SetCard/SetCard";
 import CreateSetModal from "@/features/create-set/ui/CreateSetModal/CreateSetModal";
@@ -10,6 +11,7 @@ type FilterType = "all" | "public" | "private";
 
 const CollectionsPage = () => {
   const { sets, isLoading, error, createSet } = useSets();
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState<FilterType>("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -37,8 +39,10 @@ const CollectionsPage = () => {
     visibility: "private" | "public";
   }) => {
     try {
-      await createSet(data);
+      const newSet = await createSet(data);
       setIsModalOpen(false);
+
+      navigate(`/collections/${newSet.id}`);
     } catch (err) {}
   };
 

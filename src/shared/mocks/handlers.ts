@@ -343,8 +343,11 @@ export const handlers = [
       );
     }
 
+    const isPublic = body.visibility === "public";
+
     const newSet = {
       id: generateId(),
+      shareId: isPublic ? generateId() : undefined,
       title: body.title,
       description: body.description || "",
       visibility: body.visibility || "private",
@@ -425,7 +428,16 @@ export const handlers = [
 
     if (body.title !== undefined) set.title = body.title;
     if (body.description !== undefined) set.description = body.description;
-    if (body.visibility !== undefined) set.visibility = body.visibility;
+
+    if (body.visibility !== undefined) {
+      set.visibility = body.visibility;
+
+      if (body.visibility === "public" && !set.shareId) {
+        set.shareId = generateId();
+      } else if (body.visibility === "private") {
+        set.shareId = undefined;
+      }
+    }
 
     set.updatedAt = new Date().toISOString();
 
