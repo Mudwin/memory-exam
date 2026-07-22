@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { setApi } from "../api/setApi";
 import { objectApi } from "@/entities/object/api/objectApi";
+import { getImage } from "@/shared/lib/indexedDB";
 import type { SetType } from "./types";
 import type { ObjectType } from "@/entities/object/model/types";
 
@@ -25,8 +26,21 @@ export const useSet = (setId: string | undefined) => {
         objectApi.getObjects(setId),
       ]);
 
+      const objectsWithImages = await Promise.all(
+        objectsData.map(async (obj) => {
+          try {
+            const blob = await getImage(obj.id);
+            if (blob) {
+              const url = URL.createObjectURL(blob);
+              return { ...obj, imageUrl: url };
+            }
+          } catch (err) {}
+          return obj;
+        }),
+      );
+
       setSet(setData);
-      setObjects(objectsData);
+      setObjects(objectsWithImages);
     } catch (err: any) {
       setError(err.response?.data?.error || "Ошибка загрузки набора");
     } finally {

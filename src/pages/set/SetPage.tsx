@@ -93,7 +93,7 @@ const SetPage = () => {
         <div className={styles.toolbarLeft}>
           <Button
             buttonType="save"
-            onClick={() => navigate(`/collections/${setId}/add-object`)}
+            onClick={() => navigate(`/collections/${setId}/objects/new`)}
           >
             + Добавить объект
           </Button>
@@ -124,7 +124,7 @@ const SetPage = () => {
           actionButton={
             <Button
               buttonType="save"
-              onClick={() => navigate(`/collections/${setId}/add-object`)}
+              onClick={() => navigate(`/collections/${setId}/objects/new`)}
             >
               + Добавить объект
             </Button>
