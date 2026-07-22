@@ -2,11 +2,12 @@ import { Routes, Route } from "react-router";
 import RootPage from "./RootPage";
 import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
-import LoginPage from "@/pages/login/LoginPage";
-import RegisterPage from "@/pages/register/RegisterPage";
-import CollectionsPage from "@/pages/collections/CollectionsPage";
+import LoginPage from "@/pages/login";
+import RegisterPage from "@/pages/register";
+import CollectionsPage from "@/pages/collections";
 import AppLayout from "@/app/layouts/AppLayout";
 import SetPage from "@/pages/set";
+import NewObjectPage from "@/pages/object";
 
 const AppRouter = () => {
   return (
@@ -32,6 +33,14 @@ const AppRouter = () => {
           element={
             <AppLayout>
               <SetPage />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/collections/:setId/objects/new"
+          element={
+            <AppLayout>
+              <NewObjectPage />
             </AppLayout>
           }
         />
