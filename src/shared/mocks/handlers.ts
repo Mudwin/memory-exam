@@ -355,6 +355,7 @@ export const handlers = [
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       objectCount: 0,
+      fields: [],
     };
 
     sets.set(newSet.id, newSet);
@@ -424,6 +425,7 @@ export const handlers = [
       title?: string;
       description?: string;
       visibility?: string;
+      fields?: any[];
     };
 
     if (body.title !== undefined) set.title = body.title;
@@ -437,6 +439,31 @@ export const handlers = [
       } else if (body.visibility === "private") {
         set.shareId = undefined;
       }
+    }
+
+    if (body.fields !== undefined) {
+      const oldFieldIds = new Set(set.fields.map((f: any) => f.id));
+      const newFieldIds = new Set(body.fields.map((f: any) => f.id));
+      const removedFieldIds = [...oldFieldIds].filter(
+        (id) => !newFieldIds.has(id),
+      );
+
+      if (removedFieldIds.length > 0) {
+        const setObjects = Array.from(objects.values()).filter(
+          (o: any) => o.setId === id,
+        );
+
+        for (const obj of setObjects) {
+          obj.fields = obj.fields.filter(
+            (f: any) => !removedFieldIds.includes(f.fieldId),
+          );
+
+          objects.set(obj.id, obj);
+        }
+        saveObjects(objects);
+      }
+
+      set.fields = body.fields;
     }
 
     set.updatedAt = new Date().toISOString();

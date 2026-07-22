@@ -5,6 +5,8 @@ import ObjectCard from "@/entities/object/ui/ObjectCard";
 import EmptyState from "@/shared/ui/EmptyState";
 import Button from "@/shared/ui/Button";
 import Badge from "@/shared/ui/Badge";
+import FieldDefinitionsManager from "@/features/field-definitions/ui/FieldDefinitionsManager";
+import { setApi } from "@/entities/set/api/setApi";
 import styles from "./SetPage.module.css";
 
 const SetPage = () => {
@@ -12,6 +14,12 @@ const SetPage = () => {
   const navigate = useNavigate();
   const { set, objects, isLoading, error, refresh } = useSet(setId);
   const { deleteObject } = useObjects(setId || "", objects);
+
+  const handleSaveFields = async (fields: any[]) => {
+    if (!setId) return;
+    await setApi.updateSet(setId, { fields });
+    refresh();
+  };
 
   if (isLoading) {
     return (
@@ -75,6 +83,11 @@ const SetPage = () => {
           </span>
         </div>
       </div>
+
+      <FieldDefinitionsManager
+        fields={set.fields || []}
+        onSave={handleSaveFields}
+      />
 
       <div className={styles.toolbar}>
         <div className={styles.toolbarLeft}>

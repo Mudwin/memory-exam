@@ -1,0 +1,144 @@
+.container {
+  background-color: var(--primary-color-base);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--primary-color-gray);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary-color-white);
+  margin: 0;
+}
+
+.empty {
+  color: var(--primary-color-gray);
+  text-align: center;
+  padding: 20px 0;
+  margin: 0;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fieldItem {
+  display: flex;
+  align-items: center;
+  background-color: var(--primary-color-black);
+  border-radius: 8px;
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.fieldItem:hover {
+  border-color: var(--primary-color-gray);
+}
+
+.fieldRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.fieldInput {
+  flex: 1;
+}
+
+.fieldInput .input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 6px 0;
+  color: var(--primary-color-white);
+  font-size: 14px;
+  outline: none;
+}
+
+.fieldInput .input::placeholder {
+  color: var(--primary-color-gray);
+}
+
+.actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.moveButton {
+  background: transparent;
+  border: 1px solid var(--primary-color-gray);
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  font-size: 16px;
+  color: var(--primary-color-white);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.moveButton:hover:not(:disabled) {
+  background-color: var(--primary-color-gray);
+  color: var(--primary-color-black);
+}
+
+.moveButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.deleteButton {
+  background: transparent;
+  border: 1px solid var(--primary-color-red);
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary-color-red);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.deleteButton:hover {
+  background-color: var(--primary-color-red);
+  color: var(--primary-color-black);
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.error {
+  color: var(--primary-color-red);
+  font-size: 14px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background-color: rgba(237, 135, 150, 0.1);
+  border-radius: 6px;
+}

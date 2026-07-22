@@ -17,7 +17,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUserState] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(getAccessToken());
-  const [isLoading, setIsLoading] = useState(true); // состояние инициализации
+  const [isLoading, setIsLoading] = useState(true);
 
   const isAuthenticated = user !== null && token !== null;
 

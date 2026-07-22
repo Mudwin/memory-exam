@@ -2,6 +2,12 @@ import type { ObjectType } from "@/entities/object/model/types";
 
 export type Visibility = "private" | "public";
 
+export interface FieldDefinition {
+  id: string;
+  name: string;
+  order: number;
+}
+
 export interface SetType {
   id: string;
   shareId?: string;
@@ -13,18 +19,21 @@ export interface SetType {
   updatedAt: string;
   objectCount: number;
   objects?: ObjectType[];
+  fields: FieldDefinition[];
 }
 
 export interface CreateSetDto {
   title: string;
   description?: string;
   visibility: Visibility;
+  fields?: FieldDefinition[];
 }
 
 export interface UpdateSetDto {
   title?: string;
   description?: string;
   visibility?: Visibility;
+  fields?: FieldDefinition[];
 }
 
 export interface SetPublicSettings {
