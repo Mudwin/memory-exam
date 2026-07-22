@@ -442,6 +442,8 @@ export const handlers = [
     }
 
     if (body.fields !== undefined) {
+      if (!set.fields) set.fields = [];
+
       const oldFieldIds = new Set(set.fields.map((f: any) => f.id));
       const newFieldIds = new Set(body.fields.map((f: any) => f.id));
       const removedFieldIds = [...oldFieldIds].filter(
@@ -454,6 +456,8 @@ export const handlers = [
         );
 
         for (const obj of setObjects) {
+          if (!obj.fields) obj.fields = [];
+
           obj.fields = obj.fields.filter(
             (f: any) => !removedFieldIds.includes(f.fieldId),
           );

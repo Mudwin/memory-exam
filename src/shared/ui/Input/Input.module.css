@@ -1,5 +1,6 @@
 .inputContainer {
   position: relative;
+  width: 100%;
 }
 
 .input {
@@ -12,18 +13,17 @@
   font-weight: 500;
   box-shadow: var(--box-shadow-heavy);
   transition-duration: 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
 
-  /* temporary */
-  width: 280px;
+.input:focus {
+  transform: translateY(1px);
+  box-shadow: none;
+}
 
-  &:focus {
-    transform: translateY(1px);
-    box-shadow: none;
-  }
-
-  &:focus + .clearButton {
-    transform: translateY(calc(-50% + 1px));
-  }
+.input:focus + .clearButton {
+  transform: translateY(calc(-50% + 1px));
 }
 
 .clearButton {
@@ -33,15 +33,15 @@
   right: 5px;
   border: none;
   background-color: transparent;
-  padding: none;
-  padding: 0px;
+  padding: 0;
   border-radius: 50%;
   transition-duration: 0.2s;
+  cursor: pointer;
+}
 
-  & img {
-    width: 35px;
-    height: 35px;
-  }
+.clearButton img {
+  width: 35px;
+  height: 35px;
 }
 
 .inputWrapper {
