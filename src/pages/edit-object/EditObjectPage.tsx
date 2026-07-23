@@ -14,25 +14,25 @@ import styles from "./EditObjectPage.module.css";
 const EditObjectPage = () => {
   const { setId, objectId } = useParams<{ setId: string; objectId: string }>();
   const navigate = useNavigate();
-  const { set, isLoading: setLoading } = useSet(setId);
-  const {
-    objects,
-    updateObject,
-    deleteObject,
-    loadObjectImage,
-    isLoading: objectsLoading,
-  } = useObjects(setId || "", []);
+
+  const { set, objects, isLoading: setLoading } = useSet(setId);
+
+  const { updateObject, deleteObject, loadObjectImage } = useObjects(
+    setId || "",
+    [],
+  );
 
   const [object, setObject] = useState<ObjectType | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!setId || !objectId || objects.length === 0) return;
+    if (!objectId || objects.length === 0) return;
 
     const found = objects.find((obj) => obj.id === objectId);
 
     if (found) {
       setObject(found);
+
       if (found.imageUrl) {
         setImagePreview(found.imageUrl);
       } else {
@@ -40,6 +40,8 @@ const EditObjectPage = () => {
           if (url) setImagePreview(url);
         });
       }
+    } else {
+      setObject(null);
     }
   }, [objects, objectId, loadObjectImage]);
 
@@ -68,7 +70,6 @@ const EditObjectPage = () => {
     control,
     handleSubmit,
     setValue,
-    watch,
     reset,
     formState: { errors, isValid, isDirty },
   } = useForm<FormValues>({
@@ -129,7 +130,7 @@ const EditObjectPage = () => {
     navigate(`/collections/${setId}`);
   };
 
-  if (setLoading || objectsLoading) {
+  if (setLoading) {
     return (
       <div className={styles.centerMessage}>
         <p>Загрузка...</p>
@@ -197,6 +198,7 @@ const EditObjectPage = () => {
                 }}
                 onRemove={() => {
                   setValue("image", null, { shouldValidate: true });
+
                   if (object.imageUrl) {
                     setImagePreview(object.imageUrl);
                   } else {
