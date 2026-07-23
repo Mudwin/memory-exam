@@ -9,6 +9,7 @@ import AppLayout from "@/app/layouts/AppLayout";
 import SetPage from "@/pages/set";
 import NewObjectPage from "@/pages/object/NewObjectPage";
 import EditObjectPage from "@/pages/edit-object/EditObjectPage";
+import EditSetPage from "@/pages/edit-set/EditSetPage";
 
 const AppRouter = () => {
   return (
@@ -50,6 +51,14 @@ const AppRouter = () => {
           element={
             <AppLayout>
               <EditObjectPage />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/collections/:setId/edit"
+          element={
+            <AppLayout>
+              <EditSetPage />
             </AppLayout>
           }
         />
