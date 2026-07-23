@@ -9,6 +9,7 @@ import ImageUploader from "@/shared/ui/ImageUploader";
 import Input from "@/shared/ui/Input";
 import Button from "@/shared/ui/Button";
 import type { ObjectType, FieldValue } from "@/entities/object/model/types";
+import { useToastContext } from "@/app/providers/ToastProvider";
 import styles from "./EditObjectPage.module.css";
 
 const EditObjectPage = () => {
@@ -24,6 +25,7 @@ const EditObjectPage = () => {
 
   const [object, setObject] = useState<ObjectType | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const { showSuccess, showError } = useToastContext();
 
   useEffect(() => {
     if (!objectId || objects.length === 0) return;
@@ -109,8 +111,11 @@ const EditObjectPage = () => {
         fields: fieldsArray,
         image: data.image || undefined,
       });
+      showSuccess("Изменения сохранены");
       navigate(`/collections/${setId}`);
-    } catch (err) {}
+    } catch (err) {
+      showError("Не удалось сохранить изменения");
+    }
   };
 
   const handleDelete = async () => {
@@ -122,8 +127,11 @@ const EditObjectPage = () => {
 
     try {
       await deleteObject(objectId);
+      showSuccess("Объект удалён");
       navigate(`/collections/${setId}`);
-    } catch (err) {}
+    } catch (err) {
+      showError("Не удалось удалить объект");
+    }
   };
 
   const handleCancel = () => {

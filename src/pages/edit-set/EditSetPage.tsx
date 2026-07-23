@@ -7,6 +7,7 @@ import { useSet } from "@/entities/set/model/useSet";
 import { setApi } from "@/entities/set/api/setApi";
 import Input from "@/shared/ui/Input";
 import Button from "@/shared/ui/Button";
+import { useToastContext } from "@/app/providers/ToastProvider";
 import styles from "./EditSetPage.module.css";
 
 const editSetSchema = z.object({
@@ -24,6 +25,7 @@ const EditSetPage = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [shareLink, setShareLink] = useState<string | null>(null);
   const [copySuccess, setCopySuccess] = useState(false);
+  const { showSuccess, showError } = useToastContext();
 
   const {
     register,
@@ -67,6 +69,7 @@ const EditSetPage = () => {
         visibility: data.visibility,
       });
 
+      showSuccess("Изменения сохранены");
       await refresh();
 
       if (data.visibility === "public" && set?.shareId) {
@@ -77,6 +80,7 @@ const EditSetPage = () => {
       navigate(`/collections/${setId}`);
     } catch (err) {
       console.error("Ошибка обновления набора", err);
+      showError("Не удалось сохранить изменения");
     } finally {
       setIsSaving(false);
     }
@@ -93,9 +97,11 @@ const EditSetPage = () => {
 
     try {
       await setApi.deleteSet(setId);
+      showSuccess("Набор удалён");
       navigate("/collections");
     } catch (err) {
       console.error("Ошибка удаления набора", err);
+      showError("Не удалось удалить набор");
     }
   };
 

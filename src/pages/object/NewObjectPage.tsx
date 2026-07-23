@@ -7,6 +7,7 @@ import { useObjects } from "@/entities/object/model/useObjects";
 import ImageUploader from "@/shared/ui/ImageUploader";
 import Input from "@/shared/ui/Input";
 import Button from "@/shared/ui/Button";
+import { useToastContext } from "@/app/providers/ToastProvider";
 import styles from "./NewObjectPage.module.css";
 
 const NewObjectPage = () => {
@@ -17,6 +18,7 @@ const NewObjectPage = () => {
     setId || "",
     [],
   );
+  const { showSuccess, showError } = useToastContext();
 
   const fieldDefinitions = set?.fields || [];
 
@@ -68,8 +70,11 @@ const NewObjectPage = () => {
         fields: fieldsArray,
         image: data.image || undefined,
       });
+      showSuccess("Объект добавлен");
       navigate(`/collections/${setId}`);
-    } catch (err) {}
+    } catch (err) {
+      showError("Не удалось добавить объект");
+    }
   };
 
   const handleCancel = () => {

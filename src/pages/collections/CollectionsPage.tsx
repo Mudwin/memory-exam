@@ -5,6 +5,7 @@ import SetCard from "@/entities/set/ui/SetCard/SetCard";
 import CreateSetModal from "@/features/create-set/ui/CreateSetModal/CreateSetModal";
 import Input from "@/shared/ui/Input/Input";
 import Button from "@/shared/ui/Button/Button";
+import { useToastContext } from "@/app/providers/ToastProvider";
 import styles from "./CollectionsPage.module.css";
 
 type FilterType = "all" | "public" | "private";
@@ -15,6 +16,7 @@ const CollectionsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState<FilterType>("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { showSuccess, showError } = useToastContext();
 
   const filteredSets = useMemo(() => {
     let result = sets;
@@ -41,9 +43,12 @@ const CollectionsPage = () => {
     try {
       const newSet = await createSet(data);
       setIsModalOpen(false);
+      showSuccess(`Набор "${newSet.title}" создан`);
 
       navigate(`/collections/${newSet.id}`);
-    } catch (err) {}
+    } catch (err) {
+      showError("Не удалось создать набор");
+    }
   };
 
   if (isLoading) {

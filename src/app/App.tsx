@@ -1,5 +1,6 @@
 import { BrowserRouter } from "react-router";
 import { AuthProvider } from "@/entities/user/model/AuthContext";
+import { ToastProvider } from "./providers/ToastProvider";
 import { useAuth } from "@/entities/user/model/useAuth";
 import AppRouter from "@/app/router/AppRouter";
 
@@ -19,7 +20,9 @@ const App = () => {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <AppContent />
+        <ToastProvider>
+          <AppContent />
+        </ToastProvider>
       </BrowserRouter>
     </AuthProvider>
   );

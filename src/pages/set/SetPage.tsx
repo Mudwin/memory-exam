@@ -7,6 +7,7 @@ import Button from "@/shared/ui/Button";
 import Badge from "@/shared/ui/Badge";
 import FieldDefinitionsManager from "@/features/field-definitions/ui/FieldDefinitionsManager";
 import { setApi } from "@/entities/set/api/setApi";
+import { useToastContext } from "@/app/providers/ToastProvider";
 import styles from "./SetPage.module.css";
 
 const SetPage = () => {
@@ -14,6 +15,7 @@ const SetPage = () => {
   const navigate = useNavigate();
   const { set, objects, isLoading, error, refresh } = useSet(setId);
   const { deleteObject } = useObjects(setId || "", objects);
+  const { showSuccess, showError } = useToastContext();
 
   const handleSaveFields = async (fields: any[]) => {
     if (!setId) return;
@@ -44,8 +46,11 @@ const SetPage = () => {
     if (confirm("Удалить этот объект?")) {
       try {
         await deleteObject(objectId);
+        showSuccess("Объект удалён");
         refresh();
-      } catch (err) {}
+      } catch (err) {
+        showError("Не удалось удалить объект");
+      }
     }
   };
 
