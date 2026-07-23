@@ -7,7 +7,8 @@ import RegisterPage from "@/pages/register";
 import CollectionsPage from "@/pages/collections";
 import AppLayout from "@/app/layouts/AppLayout";
 import SetPage from "@/pages/set";
-import NewObjectPage from "@/pages/object";
+import NewObjectPage from "@/pages/object/NewObjectPage";
+import EditObjectPage from "@/pages/edit-object/EditObjectPage";
 
 const AppRouter = () => {
   return (
@@ -41,6 +42,14 @@ const AppRouter = () => {
           element={
             <AppLayout>
               <NewObjectPage />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/collections/:setId/objects/:objectId/edit"
+          element={
+            <AppLayout>
+              <EditObjectPage />
             </AppLayout>
           }
         />

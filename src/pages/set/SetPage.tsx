@@ -137,7 +137,7 @@ const SetPage = () => {
               <ObjectCard
                 object={object}
                 onClick={() =>
-                  navigate(`/collections/${setId}/objects/${object.id}`)
+                  navigate(`/collections/${setId}/objects/${object.id}/edit`)
                 }
               />
               <button
