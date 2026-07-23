@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Перенаправление...</title>
+    <script>
+      const path = window.location.pathname.replace("/memory-exam/", "");
+
+      window.location.href = `/memory-exam/?redirect=${encodeURIComponent(path)}`;
+    </script>
+  </head>
+  <body></body>
+</html>

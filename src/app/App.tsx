@@ -19,7 +19,7 @@ const AppContent = () => {
 const App = () => {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
         <ToastProvider>
           <AppContent />
         </ToastProvider>
