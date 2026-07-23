@@ -563,6 +563,33 @@ export const handlers = [
     return HttpResponse.json(settings, { status: 200 });
   }),
 
+  http.get("/api/public/sets/:shareId", async ({ params }) => {
+    const { shareId } = params;
+
+    const foundSet = Array.from(sets.values()).find(
+      (s) => s.shareId === shareId && s.visibility === "public",
+    );
+
+    if (!foundSet) {
+      return HttpResponse.json(
+        { error: "Набор не найден или недоступен" },
+        { status: 404 },
+      );
+    }
+
+    const setObjects = Array.from(objects.values()).filter(
+      (o) => o.setId === foundSet.id,
+    );
+
+    const result = {
+      ...foundSet,
+      objects: setObjects,
+      objectCount: setObjects.length,
+    };
+
+    return HttpResponse.json(result, { status: 200 });
+  }),
+
   http.put("/api/sets/:id/public-settings", async ({ params, request }) => {
     const { id } = params;
     const email = getCurrentUserFromRequest(request);

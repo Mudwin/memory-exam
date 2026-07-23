@@ -10,6 +10,7 @@ import SetPage from "@/pages/set";
 import NewObjectPage from "@/pages/object/NewObjectPage";
 import EditObjectPage from "@/pages/edit-object/EditObjectPage";
 import EditSetPage from "@/pages/edit-set/EditSetPage";
+import PublicSetPage from "@/pages/public/PublicSetPage";
 
 const AppRouter = () => {
   return (
@@ -20,6 +21,8 @@ const AppRouter = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Route>
+
+      <Route path="/s/:shareId" element={<PublicSetPage />} />
 
       <Route element={<PrivateRoute />}>
         <Route

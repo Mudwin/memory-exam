@@ -56,4 +56,9 @@ export const setApi = {
 
     return data;
   },
+
+  getPublicSetByShareId: async (shareId: string): Promise<SetType> => {
+    const { data } = await apiClient.get<SetType>(`/public/sets/${shareId}`);
+    return data;
+  },
 };
