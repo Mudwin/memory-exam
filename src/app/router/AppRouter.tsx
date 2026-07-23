@@ -14,6 +14,7 @@ import PublicSetPage from "@/pages/public/PublicSetPage";
 import ProfilePage from "@/pages/profile";
 import CardsPage from "@/pages/cards";
 import TestPage from "@/pages/test";
+import ExamPage from "@/pages/exam";
 
 const AppRouter = () => {
   return (
@@ -89,6 +90,14 @@ const AppRouter = () => {
           element={
             <AppLayout>
               <TestPage />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/collections/:setId/exam"
+          element={
+            <AppLayout>
+              <ExamPage />
             </AppLayout>
           }
         />

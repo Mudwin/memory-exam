@@ -119,7 +119,10 @@ const SetPage = () => {
           >
             Тест
           </Button>
-          <Button buttonType="save" disabled>
+          <Button
+            buttonType="save"
+            onClick={() => navigate(`/collections/${setId}/exam`)}
+          >
             Экзамен
           </Button>
           <Button buttonType="save" disabled>
