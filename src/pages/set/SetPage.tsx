@@ -106,7 +106,13 @@ const SetPage = () => {
             buttonType="save"
             onClick={() => navigate(`/collections/${setId}/import/table`)}
           >
-            Импорт
+            Импорт (таблица)
+          </Button>
+          <Button
+            buttonType="save"
+            onClick={() => navigate(`/collections/${setId}/import/manual`)}
+          >
+            Импорт (ручной)
           </Button>
         </div>
         <div className={styles.toolbarRight}>
