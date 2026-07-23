@@ -15,6 +15,7 @@ import ProfilePage from "@/pages/profile";
 import CardsPage from "@/pages/cards";
 import TestPage from "@/pages/test";
 import ExamPage from "@/pages/exam";
+import ImportTablePage from "@/pages/import-table";
 
 const AppRouter = () => {
   return (
@@ -98,6 +99,14 @@ const AppRouter = () => {
           element={
             <AppLayout>
               <ExamPage />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/collections/:setId/import/table"
+          element={
+            <AppLayout>
+              <ImportTablePage />
             </AppLayout>
           }
         />

@@ -102,7 +102,10 @@ const SetPage = () => {
           >
             + Добавить объект
           </Button>
-          <Button buttonType="save" disabled>
+          <Button
+            buttonType="save"
+            onClick={() => navigate(`/collections/${setId}/import/table`)}
+          >
             Импорт
           </Button>
         </div>
