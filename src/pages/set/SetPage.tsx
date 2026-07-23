@@ -107,7 +107,10 @@ const SetPage = () => {
           </Button>
         </div>
         <div className={styles.toolbarRight}>
-          <Button buttonType="save" disabled>
+          <Button
+            buttonType="save"
+            onClick={() => navigate(`/collections/${setId}/cards`)}
+          >
             Карточки
           </Button>
           <Button buttonType="save" disabled>
