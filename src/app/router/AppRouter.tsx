@@ -13,6 +13,7 @@ import EditSetPage from "@/pages/edit-set";
 import PublicSetPage from "@/pages/public/PublicSetPage";
 import ProfilePage from "@/pages/profile";
 import CardsPage from "@/pages/cards";
+import TestPage from "@/pages/test";
 
 const AppRouter = () => {
   return (
@@ -80,6 +81,14 @@ const AppRouter = () => {
           element={
             <AppLayout>
               <CardsPage />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/collections/:setId/test"
+          element={
+            <AppLayout>
+              <TestPage />
             </AppLayout>
           }
         />
