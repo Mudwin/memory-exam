@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "@/entities/user/model/useAuth";
+import profileIcon from "@/assets/icons/profile-icon.svg";
 import styles from "./AppLayout.module.css";
 
 interface AppLayoutProps {
@@ -24,6 +25,13 @@ const AppLayout = ({ children }: AppLayoutProps) => {
             MemoryExam
           </Link>
           <div className={styles.userSection}>
+            <Link to="/profile" className={styles.profileLink}>
+              <img
+                src={profileIcon}
+                alt="Профиль"
+                className={styles.profileIcon}
+              />
+            </Link>
             <span className={styles.email}>{user?.email}</span>
             <button onClick={handleLogout} className={styles.logoutButton}>
               Выйти

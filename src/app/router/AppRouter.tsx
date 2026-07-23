@@ -7,10 +7,11 @@ import RegisterPage from "@/pages/register";
 import CollectionsPage from "@/pages/collections";
 import AppLayout from "@/app/layouts/AppLayout";
 import SetPage from "@/pages/set";
-import NewObjectPage from "@/pages/object/NewObjectPage";
-import EditObjectPage from "@/pages/edit-object/EditObjectPage";
-import EditSetPage from "@/pages/edit-set/EditSetPage";
+import NewObjectPage from "@/pages/object";
+import EditObjectPage from "@/pages/edit-object";
+import EditSetPage from "@/pages/edit-set";
 import PublicSetPage from "@/pages/public/PublicSetPage";
+import ProfilePage from "@/pages/profile";
 
 const AppRouter = () => {
   return (
@@ -62,6 +63,14 @@ const AppRouter = () => {
           element={
             <AppLayout>
               <EditSetPage />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <AppLayout>
+              <ProfilePage />
             </AppLayout>
           }
         />
