@@ -7,7 +7,9 @@ import { useSet } from "@/entities/set/model/useSet";
 import { setApi } from "@/entities/set/api/setApi";
 import Input from "@/shared/ui/Input";
 import Button from "@/shared/ui/Button";
+import Checkbox from "@/shared/ui/Checkbox";
 import { useToastContext } from "@/app/providers/ToastProvider";
+import type { SetPublicSettings } from "@/entities/set/model/types";
 import styles from "./EditSetPage.module.css";
 
 const editSetSchema = z.object({
@@ -18,6 +20,14 @@ const editSetSchema = z.object({
 
 type EditSetFormValues = z.infer<typeof editSetSchema>;
 
+const defaultPublicSettings: SetPublicSettings = {
+  allowCards: true,
+  allowTests: true,
+  allowExam: true,
+  allowAnswers: true,
+  requireAuth: false,
+};
+
 const EditSetPage = () => {
   const { setId } = useParams<{ setId: string }>();
   const navigate = useNavigate();
@@ -25,6 +35,10 @@ const EditSetPage = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [shareLink, setShareLink] = useState<string | null>(null);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [publicSettings, setPublicSettings] = useState<SetPublicSettings>(
+    defaultPublicSettings,
+  );
+  const [isLoadingSettings, setIsLoadingSettings] = useState(false);
   const { showSuccess, showError } = useToastContext();
 
   const {
@@ -46,6 +60,30 @@ const EditSetPage = () => {
   const visibility = watch("visibility");
 
   useEffect(() => {
+    const loadPublicSettings = async () => {
+      if (!setId || !set) return;
+
+      if (set.visibility === "public") {
+        setIsLoadingSettings(true);
+
+        try {
+          const settings = await setApi.getPublicSettings(setId);
+          setPublicSettings(settings);
+        } catch (err) {
+          console.error("Не удалось загрузить настройки доступа", err);
+          setPublicSettings({ ...defaultPublicSettings });
+        } finally {
+          setIsLoadingSettings(false);
+        }
+      } else {
+        setPublicSettings({ ...defaultPublicSettings });
+      }
+    };
+
+    loadPublicSettings();
+  }, [setId, set]);
+
+  useEffect(() => {
     if (set) {
       setValue("title", set.title);
       setValue("description", set.description || "");
@@ -59,6 +97,15 @@ const EditSetPage = () => {
     }
   }, [set, setValue]);
 
+  const handleCheckboxChange =
+    (key: keyof SetPublicSettings) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setPublicSettings((prev) => ({
+        ...prev,
+        [key]: e.target.checked,
+      }));
+    };
+
   const onSubmit = async (data: EditSetFormValues) => {
     if (!setId) return;
     setIsSaving(true);
@@ -68,6 +115,10 @@ const EditSetPage = () => {
         description: data.description,
         visibility: data.visibility,
       });
+
+      if (data.visibility === "public") {
+        await setApi.updatePublicSettings(setId, publicSettings);
+      }
 
       showSuccess("Изменения сохранены");
       await refresh();
@@ -182,21 +233,74 @@ const EditSetPage = () => {
           </div>
         </div>
 
-        {visibility === "public" && shareLink && (
-          <div className={styles.shareSection}>
-            <label className={styles.label}>Публичная ссылка</label>
-            <div className={styles.linkContainer}>
-              <Input
-                type="text"
-                value={shareLink}
-                readOnly
-                className={styles.linkInput}
-              />
-              <Button buttonType="save" type="button" onClick={handleCopyLink}>
-                {copySuccess ? "Скопировано" : "Копировать"}
-              </Button>
+        {visibility === "public" && (
+          <>
+            {shareLink && (
+              <div className={styles.shareSection}>
+                <label className={styles.label}>Публичная ссылка</label>
+                <div className={styles.linkContainer}>
+                  <Input
+                    type="text"
+                    value={shareLink}
+                    readOnly
+                    className={styles.linkInput}
+                  />
+                  <Button
+                    buttonType="save"
+                    type="button"
+                    onClick={handleCopyLink}
+                  >
+                    {copySuccess ? "Скопировано" : "Копировать"}
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            <div className={styles.settingsSection}>
+              <h2 className={styles.settingsTitle}>Настройки доступа</h2>
+              <p className={styles.settingsHint}>
+                Выберите, какие режимы обучения будут доступны по публичной
+                ссылке
+              </p>
+
+              {isLoadingSettings ? (
+                <p className={styles.loadingSettings}>Загрузка настроек...</p>
+              ) : (
+                <div className={styles.checkboxGroup}>
+                  <Checkbox
+                    id="allowCards"
+                    label="Доступ к карточкам"
+                    checked={publicSettings.allowCards}
+                    onChange={handleCheckboxChange("allowCards")}
+                  />
+                  <Checkbox
+                    id="allowTests"
+                    label="Доступ к тестам"
+                    checked={publicSettings.allowTests}
+                    onChange={handleCheckboxChange("allowTests")}
+                  />
+                  <Checkbox
+                    id="allowExam"
+                    label="Доступ к экзамену"
+                    checked={publicSettings.allowExam}
+                    onChange={handleCheckboxChange("allowExam")}
+                  />
+                  <Checkbox
+                    id="allowAnswers"
+                    label="Показывать правильные ответы после завершения"
+                    checked={publicSettings.allowAnswers}
+                    onChange={handleCheckboxChange("allowAnswers")}
+                  />
+                  <Checkbox
+                    id="requireAuth"
+                    label="Требовать авторизацию для прохождения"
+                    checked={publicSettings.requireAuth}
+                    onChange={handleCheckboxChange("requireAuth")}
+                  />
+                </div>
+              )}
             </div>
-          </div>
+          </>
         )}
 
         <div className={styles.actions}>

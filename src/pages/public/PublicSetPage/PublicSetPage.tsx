@@ -6,15 +6,23 @@ import { getImage } from "@/shared/lib/indexedDB";
 import ObjectCard from "@/entities/object/ui/ObjectCard";
 import EmptyState from "@/shared/ui/EmptyState";
 import Badge from "@/shared/ui/Badge";
-import type { SetType } from "@/entities/set/model/types";
+import Button from "@/shared/ui/Button";
+import { useAuth } from "@/entities/user/model/useAuth";
+import type { SetType, SetPublicSettings } from "@/entities/set/model/types";
 import type { ObjectType } from "@/entities/object/model/types";
+import flashcardsIcon from "@/assets/icons/flashcards-icon.svg";
+import testIcon from "@/assets/icons/test-icon.svg";
+import examIcon from "@/assets/icons/exam-icon.svg";
+import lockIcon from "@/assets/icons/lock-icon.svg";
 import styles from "./PublicSetPage.module.css";
 
 const PublicSetPage = () => {
   const { shareId } = useParams<{ shareId: string }>();
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const [set, setSet] = useState<SetType | null>(null);
   const [objects, setObjects] = useState<ObjectType[]>([]);
+  const [settings, setSettings] = useState<SetPublicSettings | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,6 +37,9 @@ const PublicSetPage = () => {
       try {
         const setData = await setApi.getPublicSetByShareId(shareId);
         setSet(setData);
+
+        const settingsData = await setApi.getPublicSettings(setData.id);
+        setSettings(settingsData);
 
         const objectsData = await objectApi.getObjects(setData.id);
 
@@ -77,6 +88,24 @@ const PublicSetPage = () => {
     }
   }, [set, error]);
 
+  if (settings?.requireAuth && !isAuthenticated && !isLoading) {
+    return (
+      <div className={styles.centerMessage}>
+        <h2 className={styles.accessDeniedTitle}>Требуется авторизация</h2>
+        <p className={styles.accessDeniedText}>
+          Для доступа к этому набору необходимо войти в аккаунт
+        </p>
+        <Button buttonType="save" onClick={() => navigate("/login")}>
+          Войти
+        </Button>
+      </div>
+    );
+  }
+
+  const hasAnyMode =
+    settings &&
+    (settings.allowCards || settings.allowTests || settings.allowExam);
+
   if (isLoading) {
     return (
       <div className={styles.centerMessage}>
@@ -116,18 +145,81 @@ const PublicSetPage = () => {
         </div>
       </div>
 
-      {objects.length === 0 ? (
-        <EmptyState
-          title="В этом наборе пока нет объектов"
-          description="Возможно, автор ещё не добавил материалы"
-        />
-      ) : (
-        <div className={styles.grid}>
-          {objects.map((object) => (
-            <ObjectCard key={object.id} object={object} />
-          ))}
-        </div>
-      )}
+      <div className={styles.modesSection}>
+        <h2 className={styles.modesTitle}>Режимы обучения</h2>
+
+        {settings && (
+          <div className={styles.modesGrid}>
+            <button
+              className={`${styles.modeButton} ${!settings.allowCards ? styles.modeButtonDisabled : ""}`}
+              disabled={!settings.allowCards}
+              onClick={() => navigate(`/s/${shareId}/cards`)}
+            >
+              <span className={styles.modeIcon}>
+                <img src={flashcardsIcon} alt="" />
+              </span>
+              Карточки
+              {!settings.allowCards && (
+                <span className={styles.modeLock}>
+                  <img src={lockIcon} alt="" />
+                </span>
+              )}
+            </button>
+            <button
+              className={`${styles.modeButton} ${!settings.allowTests ? styles.modeButtonDisabled : ""}`}
+              disabled={!settings.allowTests}
+              onClick={() => navigate(`/s/${shareId}/test`)}
+            >
+              <span className={styles.modeIcon}>
+                <img src={testIcon} alt="" />
+              </span>
+              Тест
+              {!settings.allowTests && (
+                <span className={styles.modeLock}>
+                  <img src={lockIcon} alt="" />
+                </span>
+              )}
+            </button>
+            <button
+              className={`${styles.modeButton} ${!settings.allowExam ? styles.modeButtonDisabled : ""}`}
+              disabled={!settings.allowExam}
+              onClick={() => navigate(`/s/${shareId}/exam`)}
+            >
+              <span className={styles.modeIcon}>
+                <img src={examIcon} alt="" />
+              </span>
+              Экзамен
+              {!settings.allowExam && (
+                <span className={styles.modeLock}>
+                  <img src={lockIcon} alt="" />
+                </span>
+              )}
+            </button>
+          </div>
+        )}
+
+        {!hasAnyMode && (
+          <p className={styles.noModesMessage}>
+            Автор не разрешил ни один режим обучения для этого набора.
+          </p>
+        )}
+      </div>
+
+      <div className={styles.objectsSection}>
+        <h2 className={styles.objectsTitle}>Объекты ({objects.length})</h2>
+        {objects.length === 0 ? (
+          <EmptyState
+            title="В этом наборе пока нет объектов"
+            description="Возможно, автор ещё не добавил материалы"
+          />
+        ) : (
+          <div className={styles.grid}>
+            {objects.map((object) => (
+              <ObjectCard key={object.id} object={object} />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

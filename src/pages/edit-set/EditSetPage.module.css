@@ -115,3 +115,40 @@
   color: var(--primary-color-red);
   font-size: 18px;
 }
+
+.settingsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background-color: var(--primary-color-black);
+  border-radius: 12px;
+  border: 1px solid var(--primary-color-gray);
+  margin-top: 4px;
+}
+
+.settingsTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary-color-white);
+  margin: 0;
+}
+
+.settingsHint {
+  font-size: 14px;
+  color: var(--primary-color-gray);
+  margin: 0 0 8px 0;
+}
+
+.checkboxGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 0;
+}
+
+.loadingSettings {
+  color: var(--primary-color-gray);
+  font-size: 14px;
+  margin: 8px 0;
+}

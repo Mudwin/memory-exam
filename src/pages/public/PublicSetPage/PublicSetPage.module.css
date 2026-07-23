@@ -99,3 +99,108 @@
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
 }
+
+.modesSection {
+  background-color: var(--primary-color-base);
+  border-radius: 16px;
+  padding: 20px 24px;
+  border: 1px solid var(--primary-color-gray);
+}
+
+.modesTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--primary-color-white);
+  margin: 0 0 16px 0;
+}
+
+.modesGrid {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.modeButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background-color: var(--primary-color-black);
+  border: 1px solid var(--primary-color-gray);
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--primary-color-white);
+  cursor: pointer;
+  transition: all 0.2s;
+  flex: 1 1 auto;
+  min-width: 140px;
+  justify-content: center;
+}
+
+.modeButton:hover:not(:disabled) {
+  background-color: var(--primary-color-gray);
+  border-color: var(--primary-color-white);
+}
+
+.modeButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(0.3);
+}
+
+.modeButtonDisabled {
+  border-color: var(--primary-color-gray);
+  background-color: var(--primary-color-black);
+}
+
+.modeIcon {
+  width: 25px;
+  height: 25px;
+}
+
+.modeIcon img {
+  width: 100%;
+}
+
+.modeLock {
+  width: 25px;
+  height: 25px;
+  margin-left: 4px;
+}
+
+.modeLock img {
+  width: 100%;
+}
+
+.noModesMessage {
+  color: var(--primary-color-gray);
+  font-size: 15px;
+  margin: 8px 0 0 0;
+}
+
+.objectsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.objectsTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary-color-white);
+  margin: 0;
+}
+
+.accessDeniedTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary-color-white);
+  margin: 0 0 8px 0;
+}
+
+.accessDeniedText {
+  font-size: 16px;
+  color: var(--primary-color-gray);
+  margin: 0 0 16px 0;
+}
