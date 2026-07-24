@@ -114,7 +114,7 @@ const ImportManualPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.title}>Ручной массовый импорт</h1>
+        <h1 className={styles.title}>Массовый импорт</h1>
         <p className={styles.subtitle}>
           Загрузите несколько изображений и заполните поля для каждого объекта
         </p>
@@ -161,7 +161,7 @@ const ImportManualPage = () => {
             onClick={handleSave}
             disabled={objects.length === 0 || isSaving}
           >
-            `Сохранить (${objects.length})`
+            Сохранить ({objects.length})
           </Button>
           <button className={styles.resetButton} onClick={handleReset}>
             Сбросить

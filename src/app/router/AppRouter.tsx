@@ -17,6 +17,7 @@ import TestPage from "@/pages/test";
 import ExamPage from "@/pages/exam";
 import ImportTablePage from "@/pages/import-table";
 import ImportManualPage from "@/pages/import-manual";
+import LandingPage from "@/pages/landing";
 
 const AppRouter = () => {
   return (
@@ -119,6 +120,7 @@ const AppRouter = () => {
             </AppLayout>
           }
         />
+        <Route path="/landing-test" element={<LandingPage />} />
       </Route>
 
       <Route path="*" element={<RootPage />} />
